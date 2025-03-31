@@ -13,16 +13,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchFragment extends Fragment {
-    private RadioGroup rgSearchType;
+    private RadioGroup rgDirection;
     private EditText etSearchInput;
     private Button btnSearch;
     private RecyclerView rvResults;
-    private boolean isSearchByStop = true;
+    private BusRouteAdapter adapter;
+    private String direction = "outbound";
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
@@ -32,42 +33,46 @@ public class SearchFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        rgSearchType = view.findViewById(R.id.rgSearchType);
+        rgDirection = view.findViewById(R.id.rgDirection);
         etSearchInput = view.findViewById(R.id.etSearchInput);
         btnSearch = view.findViewById(R.id.btnSearch);
         rvResults = view.findViewById(R.id.rvResults);
 
         rvResults.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvResults.setAdapter(new BusRouteAdapter());
+        adapter = new BusRouteAdapter();
+        rvResults.setAdapter(adapter);
     }
 
     private void setupListeners() {
-        rgSearchType.setOnCheckedChangeListener((group, checkedId) -> {
-            isSearchByStop = (checkedId == R.id.rbStop);
-            etSearchInput.setHint(isSearchByStop
-                    ? "Please enter station name"
-                    : "Please enter bus number");
+        rgDirection.setOnCheckedChangeListener((group, checkedId) -> {
+            direction = (checkedId == R.id.rbOutbound) ? "outbound" : "inbound";
         });
 
         btnSearch.setOnClickListener(v -> performSearch());
     }
 
     private void performSearch() {
-        String searchTerm = etSearchInput.getText().toString().trim();
-        if (searchTerm.isEmpty()) {
-            Toast.makeText(getContext(), "Please enter a search term", Toast.LENGTH_SHORT).show();
+        String route = etSearchInput.getText().toString().trim();
+        if (route.isEmpty()) {
+            Toast.makeText(getContext(), "Please enter a bus route", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new Thread(() -> {
             try {
-                String jsonResponse = ApiClient.getBusRoutes(searchTerm, isSearchByStop);
+                String serviceType = "1";
+                String json = ApiClient.getRouteInfo(route, direction, serviceType);
+                BusRoute busRoute = JsonParser.parseBusRoute(json);
+
                 requireActivity().runOnUiThread(() -> {
                     rvResults.setVisibility(View.VISIBLE);
+                    List<BusRoute> routes = new ArrayList<>();
+                    routes.add(busRoute);
+                    adapter.setData(routes);
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
             }
         }).start();

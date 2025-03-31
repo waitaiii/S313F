@@ -12,16 +12,16 @@
         android:background="#6200EE"
         android:gravity="center"
         android:padding="16dp"
-        android:text="SEARCH PAGE"
+        android:text="BUS ROUTE SEARCH"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
-
+    <!-- Direction Selection -->
     <RadioGroup
-        android:id="@+id/rgSearchType"
+        android:id="@+id/rgDirection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -31,21 +31,20 @@
         app:layout_constraintTop_toBottomOf="@id/titleText">
 
         <RadioButton
-            android:id="@+id/rbStop"
+            android:id="@+id/rbOutbound"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:text="Search by station" />
+            android:text="Outbound"/>
 
         <RadioButton
-            android:id="@+id/rbRoute"
+            android:id="@+id/rbInbound"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Search by bus" />
+            android:text="Inbound"/>
     </RadioGroup>
-
 
     <EditText
         android:id="@+id/etSearchInput"
@@ -53,12 +52,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:hint="Please enter station name or bus number"
+        android:hint="Enter bus route (e.g. 74B)"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rgSearchType" />
-
+        app:layout_constraintTop_toBottomOf="@id/rgDirection"/>
 
     <Button
         android:id="@+id/btnSearch"
@@ -69,8 +67,7 @@
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSearchInput" />
-
+        app:layout_constraintTop_toBottomOf="@id/etSearchInput"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvResults"
@@ -81,6 +78,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSearch" />
+        app:layout_constraintTop_toBottomOf="@id/btnSearch"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

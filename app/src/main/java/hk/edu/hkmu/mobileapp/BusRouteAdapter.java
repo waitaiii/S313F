@@ -28,7 +28,10 @@ public class BusRouteAdapter extends RecyclerView.Adapter<BusRouteAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         BusRoute route = busRoutes.get(position);
         holder.tvRouteNumber.setText(route.getRouteNumber());
-        holder.tvDestination.setText(route.getDestination());
+        holder.origTc.setText(route.getOrigTc());   // 始发站中文
+        holder.origEn.setText(route.getOrigEn());   // 始发站英文
+        holder.destTc.setText(route.getDestTc());   // 目的地中文
+        holder.destEn.setText(route.getDestEn());   // 目的地英文
     }
 
     @Override
@@ -37,11 +40,15 @@ public class BusRouteAdapter extends RecyclerView.Adapter<BusRouteAdapter.ViewHo
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvRouteNumber, tvDestination;
+        TextView tvRouteNumber, origTc, destTc, origEn, destEn;
+
         ViewHolder(View view) {
             super(view);
             tvRouteNumber = view.findViewById(R.id.tvRouteNumber);
-            tvDestination = view.findViewById(R.id.tvDestination);
+            origTc = view.findViewById(R.id.orig_tc);
+            destTc = view.findViewById(R.id.dest_tc);
+            origEn = view.findViewById(R.id.orig_en);
+            destEn = view.findViewById(R.id.dest_en);
         }
     }
 }
